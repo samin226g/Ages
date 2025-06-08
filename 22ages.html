@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      text-shadow: 0 0 10px #00f0ff;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background: #2c2f48;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    select, button {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      margin: 8px;
+    }
+
+    button {
+      background: #00f0ff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00c0d0;
+    }
+
+    .result {
+      font-size: 16px;
+      line-height: 1.6;
+      text-shadow: 0 0 5px #00f0ff;
+      margin-top: 20px;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+  </style>
+</head>
+<body>
+
+  <h1>🎮 Age Calculator</h1>
+  <div class="container">
+    <label>Select Your Date of Birth:</label><br>
+    
+    <select id="day"></select>
+    <select id="month"></select>
+    <select id="year"></select><br><br>
+
+    <button onclick="calculateAge()">Calculate</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const daySelect = document.getElementById("day");
+    const monthSelect = document.getElementById("month");
+    const yearSelect = document.getElementById("year");
+
+    // Populate day
+    for (let i = 1; i <= 31; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.text = i;
+      daySelect.appendChild(opt);
+    }
+
+    // Populate month
+    const months = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+    months.forEach((month, index) => {
+      const opt = document.createElement("option");
+      opt.value = index;
+      opt.text = month;
+      monthSelect.appendChild(opt);
+    });
+
+    // Populate year
+    for (let i = 2025; i >= 1900; i--) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.text = i;
+      yearSelect.appendChild(opt);
+    }
+
+    function calculateAge() {
+      const day = parseInt(daySelect.value);
+      const month = parseInt(monthSelect.value);
+      const year = parseInt(yearSelect.value);
+
+      const dob = new Date(year, month, day);
+      const now = new Date("2025-06-07T00:00:00");
+
+      if (isNaN(dob.getTime())) {
+        document.getElementById("result").innerText = "Please select a valid date!";
+        return;
+      }
+
+      let diff = now - dob;
+      if (diff < 0) {
+        document.getElementById("result").innerText = "Future date is not allowed!";
+        return;
+      }
+
+      let seconds = Math.floor(diff / 1000);
+      let minutes = Math.floor(seconds / 60);
+      let hours = Math.floor(minutes / 60);
+      let days = Math.floor(hours / 24);
+      let weeks = Math.floor(days / 7);
+      let monthsPassed = Math.floor(days / 30.44);
+      let yearsPassed = Math.floor(monthsPassed / 12);
+
+      document.getElementById("result").innerHTML = `
+        <strong>🧮 Your Age on 7 June 2025:</strong><br>
+        Years: ${yearsPassed} <br>
+        Months: ${monthsPassed} <br>
+        Weeks: ${weeks} <br>
+        Days: ${days} <br>
+        Hours: ${hours} <br>
+        Minutes: ${minutes} <br>
+        Seconds: ${seconds}
+      `;
+    }
+  </script>
+
+</body>
+</html>
